@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
 import DashboardWrapper from "./dashboardWrapper";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Taskly ",
-  description: "Plataforma de gerenciamento de tarefas",
+  title: "Taskly",
+  description: "Sistema para gerenciamento de tarefas",
 };
 
 export default function RootLayout({
