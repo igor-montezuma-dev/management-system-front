@@ -32,7 +32,6 @@ function Sidebar() {
               <p className="text-xs text-gray-500">Privado</p>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
