@@ -3,14 +3,19 @@
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
 import {
+  AlertCircleIcon,
+  AlertOctagonIcon,
+  AlertTriangleIcon,
   BriefcaseIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   HomeIcon,
+  Layers3Icon,
   LockIcon,
   LucideIcon,
   SearchIcon,
   SettingsIcon,
+  ShieldAlertIcon,
   UserIcon,
   UsersIcon,
   XIcon,
@@ -88,6 +93,48 @@ function Sidebar() {
             <ChevronDownIcon className="size-5" />
           )}
         </button>
+        {/* Projects List */}
+
+        <button
+          className="py3 flex w-full items-center justify-between px-8 text-gray-500"
+          onClick={() => setShowPriority((prev) => !prev)}
+        >
+          <span className="">Prioridade</span>
+          {showPriority ? (
+            <ChevronUpIcon className="size-5" />
+          ) : (
+            <ChevronDownIcon className="size-5" />
+          )}
+        </button>
+        {showPriority && (
+          <>
+            <SidebarLink
+              href="/priority/urgent"
+              icon={AlertCircleIcon}
+              label="Urgente"
+            />
+            <SidebarLink
+              href="/priority/high"
+              icon={ShieldAlertIcon}
+              label="Alta"
+            />
+            <SidebarLink
+              href="/priority/medium"
+              icon={AlertTriangleIcon}
+              label="Média"
+            />
+            <SidebarLink
+              href="/priority/low"
+              icon={AlertOctagonIcon}
+              label="Baixa"
+            />
+            <SidebarLink
+              href="/priority/backlog"
+              icon={Layers3Icon}
+              label="Backlog"
+            />
+          </>
+        )}
       </div>
     </div>
   );
