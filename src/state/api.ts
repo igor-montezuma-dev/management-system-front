@@ -66,19 +66,19 @@ export const api = createApi({
   tagTypes: ["Projects", "Tasks"],
   endpoints: (build) => ({
     getProjects: build.query<Project[], void>({
-      query: () => "api/projects",
+      query: () => "projects",
       providesTags: ["Projects"],
     }),
     createProject: build.mutation<Project, Partial<Project>>({
       query: (project) => ({
-        url: "api/projects",
+        url: "projects",
         method: "POST",
         body: project,
       }),
       invalidatesTags: ["Projects"],
     }),
     getTasks: build.query<Task[], { projectId: number }>({
-      query: ({ projectId }) => `api/tasks?projectId=${projectId}`,
+      query: ({ projectId }) => `tasks?projectId=${projectId}`,
       providesTags: (result) =>
         result
           ? result?.map(({ id }) => ({ type: "Tasks" as const, id }))
@@ -86,7 +86,7 @@ export const api = createApi({
     }),
     createTask: build.mutation<Task, Partial<Task>>({
       query: (task) => ({
-        url: "api/tasks",
+        url: "tasks",
         method: "POST",
         body: task,
       }),
@@ -94,7 +94,7 @@ export const api = createApi({
     }),
     updateTaskStatus: build.mutation<Task, {taskId: number, status: string}>({
       query: ({taskId, status}) => ({
-        url: `api/tasks${taskId}/status`,
+        url: `tasks${taskId}/status`,
         method: "PATCH",
         body: {status},
       }),

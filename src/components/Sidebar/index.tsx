@@ -2,6 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
+import { useGetProjectsQuery } from "@/state/api";
 import {
   AlertCircleIcon,
   AlertOctagonIcon,
@@ -29,6 +30,7 @@ function Sidebar() {
   const [showProjects, setShowProjects] = useState(true);
   const [showPriority, setShowPriority] = useState(true);
 
+  const { data: projects } = useGetProjectsQuery();
   const dispatch = useAppDispatch();
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed,
@@ -94,6 +96,15 @@ function Sidebar() {
           )}
         </button>
         {/* Projects List */}
+        {showProjects &&
+          projects?.map((project) => (
+            <SidebarLink
+              key={project.id}
+              href={`/projects/${project.id}`}
+              icon={BriefcaseIcon}
+              label={project.name}
+            />
+          ))}
 
         <button
           className="py3 flex w-full items-center justify-between px-8 text-gray-500"
