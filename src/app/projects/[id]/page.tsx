@@ -14,7 +14,7 @@ function Project({ params }: Props) {
 
   return (
     <div>
-      {/* <ProjectHeader activeTab={activeTab} setActiveTab={setActiveTab} /> */}
+      <ProjectHeader activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 }
