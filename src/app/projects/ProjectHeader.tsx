@@ -22,7 +22,7 @@ const ProjectHeader = ({ activeTab, setActiveTab }: Props) => {
   return (
     <div className="px-4 xl:px-6">
       <div className="pt-6lg:pb-4 pb-5 lg:pt-8">
-        <Header name="Product Design Development" />
+        <Header name="Desenvolvimento de Design de Produto" />
       </div>
       <div className="flex flex-wrap-reverse gap-2 border-y border-gray-200 pb-[8px] pt-2 dark:border-stroke-dark md:items-center">
         <div className="flex flex-1 items-center gap-2 md:gap-4">
