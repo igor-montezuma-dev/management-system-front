@@ -54,7 +54,7 @@ export interface Task {
   authorUserId?: number;
   assignedUserId?: number;
 
-  authorr?: User;
+  author?: User;
   assignee?: User;
   comments?: Comment[];
   attachments?: Attachment[];
@@ -92,13 +92,15 @@ export const api = createApi({
       }),
       invalidatesTags: ["Tasks"],
     }),
-    updateTaskStatus: build.mutation<Task, {taskId: number, status: string}>({
-      query: ({taskId, status}) => ({
-        url: `tasks${taskId}/status`,
+    updateTaskStatus: build.mutation<Task, { taskId: number; status: string }>({
+      query: ({ taskId, status }) => ({
+        url: `tasks/${taskId}/status`,
         method: "PATCH",
-        body: {status},
+        body: { status },
       }),
-      invalidatesTags: (result, error, {taskId}) => [{type: "Tasks", id: taskId}],
+      invalidatesTags: (result, error, { taskId }) => [
+        { type: "Tasks", id: taskId },
+      ],
     }),
   }),
 });
