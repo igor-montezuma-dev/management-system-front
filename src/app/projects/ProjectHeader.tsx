@@ -1,16 +1,20 @@
 "use client";
 
 import Header from "@/components/Header";
+import { Button } from "@mui/material";
 import {
   ClockIcon,
   FilterIcon,
   Grid3x3Icon,
   ListIcon,
+  PlusSquareIcon,
   Share2Icon,
   TableIcon,
 } from "lucide-react";
 
 import { useState } from "react";
+import ModalNewProject from "./ModalNewProject";
+
 
 type Props = {
   activeTab: string;
@@ -21,8 +25,24 @@ const ProjectHeader = ({ activeTab, setActiveTab }: Props) => {
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
   return (
     <div className="px-4 xl:px-6">
+      <ModalNewProject
+        isOpen={isModalNewProjectOpen}
+        onClose={() => setIsModalNewProjectOpen(false)}
+      />
+
       <div className="pt-6lg:pb-4 pb-5 lg:pt-8">
-        <Header name="Desenvolvimento de Design de Produto" />
+        <Header
+          name="Desenvolvimento de Design de Produto"
+          buttonComponent={
+            <button
+              className="flex items-center rounded-md bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
+              onClick={() => setIsModalNewProjectOpen(true)}
+            >
+              <PlusSquareIcon className="mr-2 size-5" />
+              Novo Projeto
+            </button>
+          }
+        />
       </div>
       <div className="flex flex-wrap-reverse gap-2 border-y border-gray-200 pb-[8px] pt-2 dark:border-stroke-dark md:items-center">
         <div className="flex flex-1 items-center gap-2 md:gap-4">
