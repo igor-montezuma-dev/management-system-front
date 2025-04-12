@@ -1,0 +1,181 @@
+import Modal from "@/components/Modal";
+import { Priority, Status, useCreateTaskMutation } from "@/state/api";
+import React, { useState } from "react";
+import { formatISO } from "date-fns";
+import { Loader2Icon } from "lucide-react";
+
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+  id?: string | null;
+};
+
+const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
+  const [createTask, { isLoading }] = useCreateTaskMutation();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState<Status>(Status.ToDo);
+  const [priority, setPriority] = useState<Priority>(Priority.Backlog);
+  const [tags, setTags] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [authorUserId, setAuthorUserId] = useState("");
+  const [assignedUserId, setAssignedUserId] = useState("");
+  const [projectId, setProjectId] = useState("");
+
+  const handleSubmit = async () => {
+    if (!isFormValid()) return;
+
+    const formattedStartDate = startDate
+      ? formatISO(new Date(startDate), { representation: "complete" })
+      : undefined;
+    const formattedDueDate = dueDate
+      ? formatISO(new Date(dueDate), { representation: "complete" })
+      : undefined;
+
+    await createTask({
+      title,
+      description,
+      status,
+      priority,
+      tags,
+      startDate: formattedStartDate,
+      dueDate: formattedDueDate,
+      authorUserId: parseInt(authorUserId, 10),
+      assignedUserId: assignedUserId ? parseInt(assignedUserId, 10) : undefined,
+      projectId: id ? Number(id) : Number(projectId),
+    });
+  };
+
+  const isFormValid = () => {
+    return (
+      title.trim() !== "" &&
+      authorUserId.trim() !== "" &&
+      (id || projectId.trim() !== "")
+    );
+  };
+
+  const selectStyles =
+    "mb-4 block w-full rounded border border-gray-300 px-3 py-2 dark:border-dark-tertiary dark:bg-dark-tertiary dark:text-white dark:focus:outline-none";
+
+  const inputStyles =
+    "w-full rounded border border-gray-300 p-2 shadow-sm dark:border-dark-tertiary dark:bg-dark-tertiary dark:text-white dark:focus:outline-none";
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} name="Criar Nova Tarefa">
+      <form
+        className="mt-4 space-y-6"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <input
+          type="text"
+          className={inputStyles}
+          placeholder="Título"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <textarea
+          className={inputStyles}
+          placeholder="Descrição"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-2">
+          <select
+            className={selectStyles}
+            value={status}
+            onChange={(e) =>
+              setStatus(Status[e.target.value as keyof typeof Status])
+            }
+          >
+            <option value="">Selecione o status</option>
+            <option value={Status.ToDo}>Para Fazer</option>
+            <option value={Status.WorkInProgress}>Em Andamento</option>
+            <option value={Status.UnderReview}>Em revisão</option>
+            <option value={Status.Completed}>Completo</option>
+          </select>
+          <select
+            className={selectStyles}
+            value={priority}
+            onChange={(e) =>
+              setPriority(Priority[e.target.value as keyof typeof Priority])
+            }
+          >
+            <option value="">Selecione a prioridade</option>
+            <option value={Priority.Urgent}>Urgente</option>
+            <option value={Priority.High}>Alta</option>
+            <option value={Priority.Medium}>Média</option>
+            <option value={Priority.Low}>Baixa</option>
+            <option value={Priority.Backlog}>Backlog</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          className={inputStyles}
+          placeholder="Tags (separadas por vírgula)"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+        />
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-2">
+          <input
+            type="date"
+            className={inputStyles}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="date"
+            className={inputStyles}
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+        </div>
+        <input
+          type="text"
+          className={inputStyles}
+          placeholder="ID do autor"
+          value={authorUserId}
+          onChange={(e) => setAuthorUserId(e.target.value)}
+        />
+        <input
+          type="text"
+          className={inputStyles}
+          placeholder="ID do designado"
+          value={assignedUserId}
+          onChange={(e) => setAssignedUserId(e.target.value)}
+        />
+        {id === null && (
+          <input
+            type="text"
+            className={inputStyles}
+            placeholder="ID do projeto"
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+          />
+        )}
+        <button
+          type="submit"
+          className={`focus-offset-2 mt-4 flex w-full justify-center rounded-md border border-transparent bg-blue-primary px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+            !isFormValid() || isLoading ? "cursor-not-allowed opacity-50" : ""
+          }`}
+          disabled={!isFormValid() || isLoading}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <h1>Criando</h1>
+              <Loader2Icon className="animate-spin" />
+            </div>
+          ) : (
+            "Criar Atividade"
+          )}
+        </button>
+      </form>
+    </Modal>
+  );
+};
+
+export default ModalNewTask;
